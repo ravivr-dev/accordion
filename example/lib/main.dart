@@ -77,6 +77,7 @@ class AccordionPage extends StatelessWidget //__
                     const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
                 children: [
                   AccordionSection(
+
                     isOpen: true,
                     leftIcon:
                         const Icon(Icons.insights_rounded, color: Colors.white),

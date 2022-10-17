@@ -169,123 +169,123 @@ class AccordionSection extends StatelessWidget with CommonParams {
   build(context) {
     final borderRadius = headerBorderRadius ?? 10;
 
-    return Obx(
-      () => Column(
-        key: uniqueKey,
-        children: [
-          InkWell(
-            onTap: () {
-              final listCtrl = Get.put(ListController(), tag: accordionId);
-              listCtrl.updateSections(uniqueKey);
-              _playHapticFeedback(_isOpen);
+    return InkWell(
+      onTap: () {
+        final listCtrl = Get.put(ListController(), tag: accordionId);
+        listCtrl.updateSections(uniqueKey);
+        _playHapticFeedback(_isOpen);
 
-              if (_isOpen &&
-                  scrollIntoViewOfItems != ScrollIntoViewOfItems.none &&
-                  listCtrl.controller.hasClients) {
-                Timer(
-                  250.milliseconds,
-                  () {
-                    listCtrl.controller.cancelAllHighlights();
-                    listCtrl.controller.scrollToIndex(index,
-                        preferPosition: AutoScrollPosition.middle,
-                        duration:
-                            (scrollIntoViewOfItems == ScrollIntoViewOfItems.fast
-                                    ? .5
-                                    : 1)
-                                .seconds);
-                  },
-                );
-              }
-
-              if (_isOpen) {
-                if (onCloseSection != null) onCloseSection!.call();
-              } else {
-                if (onOpenSection != null) onOpenSection!.call();
-              }
+        if (_isOpen &&
+            scrollIntoViewOfItems != ScrollIntoViewOfItems.none &&
+            listCtrl.controller.hasClients) {
+          Timer(
+            250.milliseconds,
+                () {
+              listCtrl.controller.cancelAllHighlights();
+              listCtrl.controller.scrollToIndex(index,
+                  preferPosition: AutoScrollPosition.middle,
+                  duration:
+                  (scrollIntoViewOfItems == ScrollIntoViewOfItems.fast
+                      ? .5
+                      : 1)
+                      .seconds);
             },
-            child: AnimatedContainer(
-              duration: Accordion.sectionAnimation
-                  ? 750.milliseconds
-                  : 0.milliseconds,
-              curve: Curves.easeOut,
-              alignment: Alignment.center,
-              padding: headerPadding,
-              decoration: BoxDecoration(
-                color: (_isOpen
-                        ? headerBackgroundColorOpened
-                        : headerBackgroundColor) ??
-                    Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(borderRadius),
-                  bottom: Radius.circular(_isOpen ? 0 : borderRadius),
+          );
+        }
+
+        if (_isOpen) {
+          if (onCloseSection != null) onCloseSection!.call();
+        } else {
+          if (onOpenSection != null) onOpenSection!.call();
+        }
+      },
+      child: Obx(
+        () => Column(
+          key: uniqueKey,
+          children: [
+             AnimatedContainer(
+                duration: Accordion.sectionAnimation
+                    ? 750.milliseconds
+                    : 0.milliseconds,
+                curve: Curves.easeOut,
+                alignment: Alignment.center,
+                padding: headerPadding,
+                decoration: BoxDecoration(
+                  color: (_isOpen
+                          ? headerBackgroundColorOpened
+                          : headerBackgroundColor) ??
+                      Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(borderRadius),
+                    bottom: Radius.circular(_isOpen ? 0 : borderRadius),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    if (leftIcon != null) leftIcon!,
+                    Expanded(
+                      flex: 10,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: leftIcon == null ? 0 : 15),
+                        child: header,
+                      ),
+                    ),
+                    if (rightIcon != null)
+                      RotatedBox(
+                          quarterTurns: _flipQuarterTurns, child: rightIcon!),
+                  ],
                 ),
               ),
-              child: Row(
-                children: [
-                  if (leftIcon != null) leftIcon!,
-                  Expanded(
-                    flex: 10,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: leftIcon == null ? 0 : 15),
-                      child: header,
-                    ),
-                  ),
-                  if (rightIcon != null)
-                    RotatedBox(
-                        quarterTurns: _flipQuarterTurns, child: rightIcon!),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: _isOpen
-                    ? paddingBetweenOpenSections!
-                    : paddingBetweenClosedSections!),
-            child: SizeTransition(
-              sizeFactor: sectionCtrl.controller,
-              child: ScaleTransition(
-                scale: Accordion.sectionScaleAnimation
-                    ? sectionCtrl.controller
-                    : const AlwaysStoppedAnimation(1.0),
-                child: Center(
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      color:
-                          contentBorderColor ?? Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.vertical(
-                          bottom: Radius.circular(contentBorderRadius!)),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        contentBorderWidth ?? 1,
-                        0,
-                        contentBorderWidth ?? 1,
-                        contentBorderWidth ?? 1,
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: _isOpen
+                      ? paddingBetweenOpenSections!
+                      : paddingBetweenClosedSections!),
+              child: SizeTransition(
+                sizeFactor: sectionCtrl.controller,
+                child: ScaleTransition(
+                  scale: Accordion.sectionScaleAnimation
+                      ? sectionCtrl.controller
+                      : const AlwaysStoppedAnimation(1.0),
+                  child: Center(
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color:
+                            contentBorderColor ?? Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(contentBorderRadius!)),
                       ),
-                      child: Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(
-                                    contentBorderRadius! / 1.02))),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          contentBorderWidth ?? 1,
+                          0,
+                          contentBorderWidth ?? 1,
+                          contentBorderWidth ?? 1,
+                        ),
                         child: Container(
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                              color: contentBackgroundColor,
+                              color: Colors.white,
                               borderRadius: BorderRadius.vertical(
                                   bottom: Radius.circular(
                                       contentBorderRadius! / 1.02))),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: contentHorizontalPadding!,
-                              vertical: contentVerticalPadding!,
-                            ),
-                            child: Center(
-                              child: content,
+                          child: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                                color: contentBackgroundColor,
+                                borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(
+                                        contentBorderRadius! / 1.02))),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: contentHorizontalPadding!,
+                                vertical: contentVerticalPadding!,
+                              ),
+                              child: Center(
+                                child: content,
+                              ),
                             ),
                           ),
                         ),
@@ -295,8 +295,8 @@ class AccordionSection extends StatelessWidget with CommonParams {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
