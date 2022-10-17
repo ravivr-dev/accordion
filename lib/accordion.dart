@@ -47,6 +47,8 @@ class Accordion extends StatelessWidget with CommonParams {
   static bool sectionAnimation = true;
   static bool sectionScaleAnimation = true;
   final listCtrl = Get.put(ListController());
+  final Widget? divider;
+
 
   Accordion({
     Key? key,
@@ -58,7 +60,7 @@ class Accordion extends StatelessWidget with CommonParams {
     double? headerBorderRadius,
     Widget? leftIcon,
     Widget? rightIcon,
-    Widget? header,
+    this.divider,
     bool? flipRightIconIfOpen,
     Color? contentBackgroundColor,
     Color? contentBorderColor,
@@ -122,12 +124,14 @@ class Accordion extends StatelessWidget with CommonParams {
     sectionAnimation = openAndCloseAnimation ?? true;
     sectionScaleAnimation = scaleWhenAnimating ?? true;
     this.accordionId = hashCode.toString();
+
   }
 
   @override
   build(context) {
     final listCtrl = Get.put(ListController(), tag: hashCode.toString());
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (BuildContext context, int index) => divider??Container(),
       itemCount: children.length,
       controller: listCtrl.controller,
       shrinkWrap: true,
